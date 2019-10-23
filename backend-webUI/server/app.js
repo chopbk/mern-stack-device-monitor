@@ -3,10 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors          = require('cors');
 
 const CONFIG = require('./config/server-config');
 var indexRouter = require('./controllers/routes/index');
-var usersRouter = require('./controllers/routes/users');
 
 var app = express();
 
@@ -22,7 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './controllers/public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 //Log Env
 console.log("Environment:", CONFIG)
