@@ -4,64 +4,67 @@
  * @date 23/10/2019
  */
 'use strict';
-const {to} = require('await-to-js');
+const { to } = require('await-to-js');
 const parseErr = require('parse-error');
 
 /**
- * @Des This function make a function to promise function 
- * @param {function} promise : function want to wait
- * @return {} result : result of function promise or err
+ * @Description This function make a function to promise function 
+ * @param {function} promise : function return a promise 
+ * @return {} [err,res] : error and result
  */
 module.exports.to = async (promise) => {
     let err, res;
     [err, res] = await to(promise);
-    if(err) return [parseErr(err)];
+    if (err) return [parseErr(err)];
 
     return [null, res];
 };
 
 /**
- * @Des This function response err to Web 
+ * @Description This function response err to Web 
  * @param {Object} res, err, code : info to response
- * @return {} res : response
+ * @return {Object} res : response
  */
-module.exports.ResErr = function(res, err, code){ // Error Web Response
-    if(typeof err == 'object' && typeof err.message != 'undefined'){
+module.exports.ResErr = function (res, err, code) { // Error Web Response
+    if (typeof err == 'object' && typeof err.message != 'undefined') {
         err = err.message;
     }
 
-    if(typeof code !== 'undefined') res.statusCode = code;
+    if (typeof code !== 'undefined') res.statusCode = code;
 
-    return res.json({success:false, error: err});
+    return res.json({
+        success: false,
+        error: err
+    });
 };
 
 /**
- * @Des This function response sucess to Web 
+ * @Description This function response sucess to Web 
  * @param {Object} res, err, code : info to response
- * @return {} res : response
+ * @return {Object} res : response
  */
-module.exports.ResSuccess = function(res, data, code){ // Success Web Response
-    let send_data = {success:true};
+module.exports.ResSuccess = function (res, data, code) { // Success Web Response
+    let send_data = {
+        success: true
+    };
 
-    if(typeof data == 'object'){
-        send_data = Object.assign(data, send_data);//merge the objects
+    if (typeof data == 'object') {
+        send_data = Object.assign(data, send_data); //merge the objects
     }
 
-    if(typeof code !== 'undefined') res.statusCode = code;
+    if (typeof code !== 'undefined') res.statusCode = code;
 
     return res.json(send_data)
 };
 
 /**
- * @Des This function throw new error
- * @param {} err_message, log : error info and log option
- * @return {} res : response
+ * @Description This function call throw new error and log error
+ * @param {string} err_message, log : error info and log option
+ * @return {Object} res : response
  */
-module.exports.ThrowErr = function(err_message, log){ // ThrowErr stands for Throw Error
-    if(log === true){
+module.exports.ThrowErr = function (err_message, log) { // ThrowErr stands for Throw Error
+    if (log === true) {
         console.error(err_message);
     }
     throw new Error(err_message);
 };
-
-

@@ -9,9 +9,9 @@ const validator = require('validator');
 const { to, ThrowErr} = require('./util-services');
 
 /**
- * @Des This function return key from body
+ * @Description This function return key from body
  * @param {Object} body : req body will include email or phone, password
- * @return {} key : unique key
+ * @return {string} key : unique key
  */
 const getKeyFromBody = (body) => {
     let key = body.unique_key;
@@ -27,7 +27,7 @@ const getKeyFromBody = (body) => {
     return key;
 }
 /**
- * @Des This function will authenticate UserInfo and return user on DB if ok.
+ * @Description This function will authenticate UserInfo and return user on DB if ok.
  * @param {Object} UserInfo : req body will include email or phone, password
  * @return {Object} user : authen user from Database if true
  */
@@ -52,7 +52,7 @@ const authUser = async (userInfo) => {
             }
         }));
         if (err) ThrowErr(err.message); //If email not found in Db
-        
+
     } else if (validator.isMobilePhone(unique_key, 'any')) {
         [err, user] = await to(User.findOne({
             where: {
