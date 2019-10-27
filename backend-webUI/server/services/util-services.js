@@ -22,7 +22,9 @@ module.exports.to = async (promise) => {
 
 /**
  * @Description This function response err to Web 
- * @param {Object} res, err, code : info to response
+ * @param {Object} res : info to response
+ * @param (error) err: err message
+ * @param (number) code: err code
  * @return {Object} res : response
  */
 module.exports.ResErr = function (res, err, code) { // Error Web Response
@@ -40,7 +42,9 @@ module.exports.ResErr = function (res, err, code) { // Error Web Response
 
 /**
  * @Description This function response sucess to Web 
- * @param {Object} res, err, code : info to response
+ * @param {Object} res : info to response
+ * @param (error) err: err message
+ * @param (number) code: err code
  * @return {Object} res : response
  */
 module.exports.ResSuccess = function (res, data, code) { // Success Web Response
