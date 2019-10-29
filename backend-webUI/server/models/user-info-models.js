@@ -10,22 +10,21 @@ const {ThrowErr, to}          = require('../services/util-services');
  * @Description export function to interact with User Info Table in DB 
  */
 module.exports = (sequelize, DataTypes) => {
-    var Model = sequelize.define('UserInfo', {
+    var Info = sequelize.define('UserInfo', {
         firstName: DataTypes.STRING,
         lastName: DataTypes.STRING,
         address: DataTypes.STRING,
         dateOfBirth: DataTypes.DATE,
         sex: DataTypes.ENUM('male', 'female', 'other')
     });
-    Model.associate = function (models) {
-        this.Users = this.belongsToMany(models.User, {
-            through: 'UserLink'
-        });
+
+    Info.associate = function (models) {
+        //this.Users = Model.hasOne(models.User)
     };
-    Model.prototype.toWeb = function () {
+    Info.prototype.toWeb = function () {
         let json = this.toJSON();
         return json;
     };
 
-    return Model;
+    return Info;
 };

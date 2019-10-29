@@ -15,7 +15,7 @@ const CONFIG            = require('../config/server-config');
  * @Description export function to interact with User Authentication Table in DB 
  */
 module.exports = (sequelize, DataTypes) => {
-    var Model = sequelize.define('User', {
+    var User = sequelize.define('User', {
         email: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -41,16 +41,17 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         password: DataTypes.STRING,
+        userInfoId: DataTypes.INTEGER, //foreign keys of User Info
     }); // If don't want auto add timestamp attributes, add timestamps : false
-
-    // This table associate with UserInfo table
-    Model.associate = function (models) {
-        this.UserInfos = this.belongsToMany(models.UserInfo, {
-            through: 'UserLinkTbl'
-        });
+    User.associate = function (models) {
+        User.belongsTo(models.UserInfo, {
+            foreignKey: 'userInfoId',
+            as: 'info'
+        })
     };
+
     //Encrypt password 
-    Model.beforeSave(async function (user, options) {
+    User.beforeSave(async function (user, options) {
         let err;
         if (user.changed('password')) {
             let salt, hash;
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
     //Compare password with password in DB
-    Model.prototype.comparePassword = async function (pw) {
+    User.prototype.comparePassword = async function (pw) {
         let err, pass
         if (!this.password) ThrowErr('password not set');
 
@@ -76,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
         return this;
     }
     //Get new Json Web Token for Authentication
-    Model.prototype.getJWT = function () {
+    User.prototype.getJWT = function () {
         let expiration_time = parseInt(CONFIG.jwt_expiration);
         return "Bearer " + jwt.sign({
             user_id: this.id
@@ -85,9 +86,9 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
     //Convert this User Authen Object to Json
-    Model.prototype.toWeb = function () {
+    User.prototype.toWeb = function () {
         let json = this.toJSON();
         return json;
     };
-    return Model;
+    return User;
 };
