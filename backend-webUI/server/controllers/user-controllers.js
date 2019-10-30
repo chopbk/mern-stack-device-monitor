@@ -4,7 +4,6 @@
  * @date 24/10/2019
  */
 'use strict';
-const { User }          = require('../models/mysql-connector');
 const { to, ResSuccess, ResErr }  = require('../services/util-services');
 const UserServices   = require('../services/user-services');
 
@@ -26,11 +25,11 @@ const getLogin = async (req, res, next) => {
  * @return {}  : 
  */
 const postLogin = async (req, res) => {
-    const body = req.body;
     let err, user;
     // call authen services
-
-    [err, user] = await to(UserServices.authUser(req.body));
+    console.log('authInfo');
+    console.log(req.body);
+    [err, user] = await to(UserServices.authUser(req.authInfo));
     if (err) {
         return ResErr(res, err, 422);
     }
@@ -41,6 +40,40 @@ const postLogin = async (req, res) => {
     });
 }
 
+/**
+ * @Description This function handle GET request for signup API
+ * @param {Object} req, res, next : request, response, next middleware function
+ * @return {}  : 
+ */
+const getSignup = async (req, res, next) => {
+    res.render('signup.ejs', {
+        message: '',
+        title: 'Đăng ký'
+    });
+   
+};
+
+/**
+ * @Description This function handle POST request for signup API
+ * @param {Object} req, res, next : request, response, next middleware function
+ * @return {}  : 
+ */
+const postSignup = async (req, res) => {
+    let err, user;
+    [err, user] = await to(UserServices.createUser(req.authInfo, req.userInfo));
+
+    if (err) return ResErr(res, err, 422);
+    return ResSuccess(res, {
+        message: 'Successfully created new user.',
+        user: user.user.toWeb(),
+        info: user.info.toWeb(),
+    }, 201);
+}
 //Export module
+//Login controller modules
 module.exports.getLogin = getLogin;
 module.exports.postLogin = postLogin;
+
+//Sigup controller modules
+module.exports.getSignup = getSignup;
+module.exports.postSignup = postSignup;
