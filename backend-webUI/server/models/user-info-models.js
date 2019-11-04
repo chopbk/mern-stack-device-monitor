@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         lastName: DataTypes.STRING,
         address: DataTypes.STRING,
         dateOfBirth: DataTypes.DATE,
-        sex: DataTypes.ENUM('male', 'female', 'other')
+        gender: DataTypes.ENUM('male', 'female', 'other')
     });
 
     Info.associate = function (models) {

@@ -88,6 +88,7 @@ module.exports = (sequelize, DataTypes) => {
     //Convert this User Authen Object to Json
     User.prototype.toWeb = function () {
         let json = this.toJSON();
+        delete json.password;
         return json;
     };
     return User;

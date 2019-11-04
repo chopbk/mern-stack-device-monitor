@@ -109,6 +109,61 @@ const validateSignupData = (req, res, next) => {
     req.authInfo = authInfo;
     next();
 };
+
+/**
+ * @Description This function will validator Update User Info and return true if ok.
+ * @param {Object} (req, res, next) : req body will include email, phone, password and user info
+ * @return {Object} response error or add User Info to req 
+ */
+const validateUpdateData = (req, res, next) => {
+    console.log('validateSignupData');
+    let userInfo = {};
+    let authInfo = {};
+    //valid email
+    if (isDataValid(req.body.email)) {
+        if (validator.isEmail(req.body.email)) {
+            authInfo.email = req.body.email;
+        } else {
+            return ResErr(res, 'Please enter a valid email');
+        }
+    } 
+    if (isDataValid(req.body.phone)) {
+        if (validator.isMobilePhone(req.body.phone)) {
+            authInfo.phone = req.body.phone;
+        } else {
+            return ResErr(res, 'Please enter a valid phone number');
+        }
+    } 
+    //valid password
+    if (isDataValid(req.body.password)) {
+        //Check retype - password
+        if (isDataValid(req.body.repassword)) {
+            if (!(req.body.password === req.body.repassword))
+                return ResErr(res, 'Password not equal');
+        } else {
+            return ResErr(res, 'Please enter retype password');
+        }
+        authInfo.password = req.body.password;
+    } 
+    //valid name
+    if (isDataValid(req.body.lastName)) {
+        userInfo.lastName = req.body.lastName;
+    }
+    if (isDataValid(req.body.firstName)) {
+        userInfo.firstName = req.body.firstName;
+    }
+    //add address and gender 
+    if (req.body.address) {
+        userInfo.address = req.body.address;
+    }
+    if (req.body.gender) {
+        userInfo.gender = req.body.gender;
+    }
+    req.userInfo = userInfo;
+    req.authInfo = authInfo;
+    next();
+};
 //export 
 module.exports.validateSignupData = validateSignupData;
 module.exports.validateLoginData = validateLoginData;
+module.exports.validateUpdateData = validateUpdateData;
