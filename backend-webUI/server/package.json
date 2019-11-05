@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start:dev": "nodemon ./bin/www -ext ejs,js,env --ignore 'test/*'"
+    "start:dev": "nodemon ./bin/www -ext ejs,js,env --ignore 'test/*'",
+    "start:test": "nodemon ./test/test.js -ext ejs,js"
   },
   "dependencies": {
     "await-to-js": "^2.1.1",

@@ -36,10 +36,9 @@ const isEmailExistInDB = async (email) => {
             email: email
         }
     }));
-    if(!user) {
+    if (!user) {
         return false;
     }
-    console.log('exist');
     return true;
 }
 /**
@@ -95,13 +94,16 @@ const authUser = async (userInfo) => {
  */
 const createUser = async (authInfo, userInfo) => {
     let err, user, info, isExist;
-    [err, isExist] = await to(isEmailExistInDB(authInfo.email));
-    if (isExist === true) {
-        ThrowErr('Email has already used');
-    }
-    [err, isExist] = await to(isPhoneExistInDB(authInfo.phone));
-    if (isExist === true) {
-        ThrowErr('Phone has already used');
+    if (typeof authInfo.email != 'undefined') {
+        [err, isExist] = await to(isEmailExistInDB(authInfo.email));
+        if (isExist === true) {
+            ThrowErr('Email has already used');
+        }
+    } else if (typeof authInfo.phone != 'undefined') {
+        [err, isExist] = await to(isPhoneExistInDB(authInfo.phone));
+        if (isExist === true) {
+            ThrowErr('Phone has already used');
+        }        
     }
 
     //Create auth info with email, phone, password
@@ -124,7 +126,66 @@ const createUser = async (authInfo, userInfo) => {
     };
 }
 
+/**
+ * @Description This function will get user info from auth user
+ * @param {Object} user : user models after use passport middleware function
+ * @return {Object} userInfo : user info from DB
+ */
+const getUserInfo = async (user) => {
+    let err, info;
+    [err, info] = await to(user.getInfo());
+    if (err) {
+        ThrowErr(err.message);
+    }
+    return info;
+}
+/**
+ * @Description This function will update user info from auth user
+ * @param {Object} user : user models after use passport middleware function
+ * @return {Object} userInfo : new user info from DB
+ */
+const updateUser = async (user, authInfo, userInfo) => {
+    let err, info,isExist;
+    if (typeof authInfo.email != 'undefined') {
+        [err, isExist] = await to(isEmailExistInDB(authInfo.email));
+        if (isExist === true) {
+            ThrowErr('Email has already used');
+        }
+    } 
+    if (typeof authInfo.phone != 'undefined') {
+        [err, isExist] = await to(isPhoneExistInDB(authInfo.phone));
+        if (isExist === true) {
+            ThrowErr('Phone has already used');
+        }        
+    }
+    if (typeof authInfo != 'undefined') {
+        user.set(authInfo);
+    }
+    [err, user] = await to(user.save());
+    if (err) {
+        if (err.message == 'Validation error')
+            ThrowErr('The email address or phone number is already in use');
+    }
+    //Get user info from user
+    [err, info] = await to(user.getInfo());
+    if (typeof userInfo != 'undefined') {
+        info.set(userInfo);
+    }
+    if (err) {
+        ThrowErr(err.message);
+    }
+    [err, info] = await to(info.save());
+    if (err) {
+        ThrowErr(err.message)
+    }
+    return {
+        user,
+        info
+    };
+}
 
 //Export module
 module.exports.authUser = authUser;
 module.exports.createUser = createUser;
+module.exports.getUserInfo = getUserInfo;
+module.exports.updateUser = updateUser;

@@ -8,6 +8,16 @@ var express = require('express');
 var router = express.Router();
 const UserController = require('../../user-controllers');
 const ValidatorData = require('../../../middleware/validator-data');
+const passport = require('passport');
+const passportMid = require('./../../../middleware/passport');
+passportMid.passportJWT(passport);
+
+/* User update API. */
+router.route('/')
+    .get(passport.authenticate('jwt', {session:false}), UserController.getUser)
+    //Put for update user info (edit)
+    .put(passport.authenticate('jwt', {session:false}),ValidatorData.validateUpdateData, UserController.putUser)
+    .delete(passport.authenticate('jwt', {session:false}))//, UserController.delete)
 /* User Login API. */
 router.route('/login')
     .get(UserController.getLogin)
