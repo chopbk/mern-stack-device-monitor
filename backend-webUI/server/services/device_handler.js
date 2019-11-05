@@ -1,5 +1,5 @@
 var mySqlPool = require("../controllers/connector/mysql-connecttion/mysql-connector");
-var deviceUserInfor = require("../models/device_user_info")
+var deviceUserInfor = require("../models/devices/device_user_info")
 
 function getDeviceInforFromUser(deviceID) {
 	return new Promise(function (resolve, reject) {

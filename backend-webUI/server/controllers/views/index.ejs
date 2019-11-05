@@ -1,11 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+    <title>Trung tâm nghiên cứu thiết bị y tế</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body         { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="jumbotron text-center">
+        <h1><span class="fa fa-lock"></span> TT Y Tế </h1>
+
+        <p>Đăng nhập hoặc đăng ký</p>
+        <a href="/api/u/login" class="btn btn-default"><span class="fa fa-user"></span> Đăng Nhập</a>
+        <a href="/api/u/signup" class="btn btn-default"><span class="fa fa-user"></span> Đăng Ký</a>
+        <a href="/api/u/login/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
+    </div>
+
+    <div class="text-center">
+        <p>Bản Demo bởi <a href="/about">Tamnd12</a>.</p>
+    </div>
+
+</div>
+</body>
 </html>

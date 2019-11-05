@@ -1,10 +1,9 @@
-var mysql = require('../../../node_modules/mysql');
-var bcrypt = require('../../../node_modules/bcrypt');
-var uuid = require('../../../node_modules/node-uuid');
+var mysql = require('mysql');
+var bcrypt = require('bcrypt');
+var uuid = require('node-uuid');
 var config = require('../../../config/local.config')
-var async = require('../../../node_modules/async');
+var async = require('async');
 
-var queryObject = require("../../../models/query_object");
 
 var conn_props = config.config.db_config;
 
